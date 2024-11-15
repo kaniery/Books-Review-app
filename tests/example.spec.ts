@@ -16,9 +16,7 @@ test.describe("Login validation test", () => {
 
     const errorMessage = await page.locator("#error-message");
     await expect(errorMessage).toBeVisible();
-    await expect(errorMessage).toHaveText(
-      "メールアドレスとパスワードは必須です"
-    );
+    await expect(errorMessage).toHaveText("必須項目を入力してください");
   });
 
   test("Input blank email and password", async ({ page }) => {
@@ -32,9 +30,7 @@ test.describe("Login validation test", () => {
 
     const errorMessage = await page.locator("#error-message");
     await expect(errorMessage).toBeVisible();
-    await expect(errorMessage).toHaveText(
-      "メールアドレスとパスワードは必須です"
-    );
+    await expect(errorMessage).toHaveText("必須項目を入力してください");
   });
 
   test("Input correct email and password", async ({ page }) => {

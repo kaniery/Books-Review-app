@@ -1,27 +1,42 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
+import axios from "axios";
+import requests from "../utils/Requests";
 
-//他のコンポーネントに値を渡すために設定？
-interface LoginProps {
-  onSubmit: (email: string, password: string) => void;
-}
-
-const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
+const SignUp: FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (email != "" && password != "") {
-      onSubmit(email, password);
+    if (username != "" && email != "" && password != "") {
       setIsSubmitted(true);
+
+      axios
+        .post(requests.InsertUserData, {
+          name: username,
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setUsername("");
       setEmail("");
       setPassword("");
     } else {
       setIsSubmitted(false);
-      console.log("false"); // デバッグ用
     }
+  };
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,8 +52,29 @@ const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
       <div className="flex justify-center mt-35 mx-10 mb-10">
         <form role="form" className="w-full max-w-2xl" onSubmit={handleSubmit}>
           <p className="text-2xl text-black font-bold text-center mb-5">
-            Login
+            Sign up
           </p>
+
+          <input type="file" id="file" accept="image/*" />
+
+          <div className="md:flex md:items-center mb-6">
+            <div className="md:w-1/4">
+              <label
+                className="block text-black font-bold md:text-right mb-1 md:mb-0 pr-6"
+                htmlFor="username"
+              >
+                ユーザーネーム
+              </label>
+            </div>
+            <div className="md:w-2/3">
+              <input
+                id="username"
+                className="bg-gray-200 appearance-none border-2 border-gray-400 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                value={username}
+                onChange={handleUsernameChange}
+              ></input>
+            </div>
+          </div>
 
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/4">
@@ -84,7 +120,7 @@ const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
             {isSubmitted ? (
               <div>
                 <p className="text-green-500 text-lg text-bold">
-                  ログインが完了しました
+                  ユーザーが作成されました
                 </p>
               </div>
             ) : (
@@ -110,4 +146,4 @@ const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
   );
 };
 
-export default LoginForm;
+export default SignUp;
