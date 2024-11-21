@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 
-//他のコンポーネントに値を渡すために設定？
-interface LoginProps {
-  onSubmit: (email: string, password: string) => void;
-}
-
-const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
+const Login = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +9,6 @@ const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
     event.preventDefault();
 
     if (email != "" && password != "") {
-      onSubmit(email, password);
       setIsSubmitted(true);
       setEmail("");
       setPassword("");
@@ -110,4 +104,4 @@ const LoginForm: React.FC<LoginProps> = ({ onSubmit }) => {
   );
 };
 
-export default LoginForm;
+export default Login;
