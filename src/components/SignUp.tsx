@@ -59,9 +59,6 @@ const SignUp: FC = () => {
   const [token, setToken] = useState("");
 
   const onSubmit = async (data: FormValues) => {
-    setIsSubmitted(true);
-    setErrorMessage("");
-
     try {
       // ユーザーデータをPOSTしてトークンを取得
       const userResponse = await axios.post(requests.InsertUserData, {
@@ -69,7 +66,7 @@ const SignUp: FC = () => {
         email: data.email,
         password: data.password,
       });
-      setToken(userResponse.data.token); // トークンをstateに保存
+      setToken(userResponse.data.token[0]); // トークンをstateに保存
 
       // 圧縮画像が存在する場合はアップロード
       if (compressedImageFile) {
@@ -84,6 +81,9 @@ const SignUp: FC = () => {
         });
         console.log("画像アップロード成功");
       }
+
+      setIsSubmitted(true);
+      setErrorMessage("");
     } catch (error) {
       console.error("エラー:", error);
       setErrorMessage("登録中にエラーが発生しました。");
@@ -210,15 +210,7 @@ const SignUp: FC = () => {
           <div className="font-bold text-center mb-5">
             {isSubmitted && !errorMessage ? (
               <div>
-                <p className="text-green-500 text-lg font-bold">
-                  ユーザーが作成されました
-                </p>
-                <Link
-                  to="/login"
-                  className="text-blue-500 text-lg font-bold no-underline hover:underline"
-                >
-                  Loginページに移動する
-                </Link>
+                <p className="text-green-500 text-lg font-bold">Success!</p>
               </div>
             ) : (
               <p className="text-red-500 text-lg font-bold">{errorMessage}</p>
@@ -229,6 +221,14 @@ const SignUp: FC = () => {
             >
               Submit
             </button>
+            <div className="mt-3">
+              <Link
+                to="/login"
+                className="text-blue-500 text-lg font-bold no-underline hover:underline"
+              >
+                Loginページに移動する
+              </Link>
+            </div>
           </div>
         </form>
       </div>
